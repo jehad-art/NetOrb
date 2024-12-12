@@ -28,7 +28,7 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
    &emsp; Stable internet connection for fetching vulnerability updates and remote SSH access.<br>
 
 <h2>Environment Preparation</h2>
-<b>install Network Emulation (GNS3)::</b><br>
+<b>Install Network Emulation (GNS3)::</b><br>
 - Install the client.<br>
 - Install GNS3 VM.<br>
 - Configure the network setting in vmware to make it bridge network.<br>
@@ -43,13 +43,27 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
 ![image](https://github.com/user-attachments/assets/62e196fa-f1d4-4b22-be9f-797eaa22516f)<br>
 
 
-<h2>Network topology</h2>
-![image](https://github.com/user-attachments/assets/c934e534-911c-4986-8429-889e5e0d1687)
+<h2>Virtual Network topology</h2>
+<img src="https://github.com/user-attachments/assets/c934e534-911c-4986-8429-889e5e0d1687" />
 
 <br>
+<p align='center'>Figure: The somulated network topology</p>
 <br>
-
-
-
-
+<h2>Initial Configuration</h2>
+<b>Sample configuration applied to the router</b><br>
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "9548210a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%load_ext watermark\n",
+    "%watermark"
+   ]
+  }
+  ]
+  }
 
