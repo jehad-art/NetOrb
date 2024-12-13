@@ -48,9 +48,9 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.[1]<b
 - Creating a loopback adapter and connect it through cloud template<br><br>
 
 ![image](https://github.com/user-attachments/assets/f0ee65b9-2660-418e-a7cb-6dc3d70b9260)
-&emsp;&emsp;
+<br><br><br>
 ![image](https://github.com/user-attachments/assets/62e196fa-f1d4-4b22-be9f-797eaa22516f)<br>
-<p align='center'>Figure: Required settings for GNS3 VM</p>
+<p>Figure: Required settings for GNS3 VM</p>
 
 ## Virtual Network topology
 <img src="https://github.com/user-attachments/assets/c934e534-911c-4986-8429-889e5e0d1687" />
