@@ -5,8 +5,7 @@ Hardening the configuration of network assets has become an essential practice f
 
 here, we are proposing a passive, automated solution for hardening the configurations of Special-Purpose network systems. The solution identifies critical assets and analyzes them for potential misconfigurations. It is designed to address all aspects of network security, including asset configuration, architectural segmentation, and Defense-In-Depth strategies.
 
-This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
-<a href="https://ieeexplore.ieee.org/document/9623186"> H. M. D. G. V. Perera, K. M. Samarasekara, I. U. K. Hewamanna, D. N. W. Kasthuriarachchi, K. Y. Abeywardena and K. Yapa, "NetBot - An Automated Router Hardening Solution for Small to Medium Enterprises," 2021 IEEE 12th Annual Information Technology, Electronics and Mobile Communication Conference (IEMCON), Vancouver, BC, Canada, 2021 </a>
+This is an implementation of the paper made by H. M. D. G. V. Perera et al.[1]<br>
 
 ## Table of Content
 
@@ -123,4 +122,6 @@ Sample output for the implemented work:<br>
 <img src="https://github.com/user-attachments/assets/00cda780-d3a4-4f8b-aea6-6bb20edcce4e" /><br>
 <p align='center'>Figure: The output of a sample router's configuration result</p>
 
+## References
+[1] <a href="https://ieeexplore.ieee.org/document/9623186"> H. M. D. G. V. Perera, K. M. Samarasekara, I. U. K. Hewamanna, D. N. W. Kasthuriarachchi, K. Y. Abeywardena and K. Yapa, "NetBot - An Automated Router Hardening Solution for Small to Medium Enterprises," 2021 IEEE 12th Annual Information Technology, Electronics and Mobile Communication Conference (IEMCON), Vancouver, BC, Canada, 2021 </a>
 
