@@ -14,7 +14,8 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
 - [Table of Content](#table-of-content)
 - [Environment Preparation](#Environment-Preparation)
 - [Virtual Network topology](#Virtual-Network-topology)
-- [Colophon](#colophon)
+- [Getting Started](#Getting-Started)
+- [Expected Output](#Expected-Output)
 
 ## Prerequisites
 <h3>Software Requirements</h3>
@@ -83,4 +84,43 @@ pip install netmiko
 ```bash
 python -m pip install -U prettytable 
 ```
+### Implementation code structure
+The code structured into the following files:<br>
+- `Extract_config.py` (to extract the router configuration to a string variable)<br>
+- `Original_config.txt` (the extracted config)<br>
+- `Structure_config.py` (to read the extracted config and convert it to final json form)<br>
+- `Config_C3745.json` (structure file to be analyzed)<br>
+- `Analyze_config.py` (to analyze the structured file line by line and identify the misconfiguration and suggested fixes)<br>
+- `Print_config.py` (print the resultant output in a tabular format for human readable)<br>
+- `Main.py` (the main file to call all previous functions in and run it)<br>
+
+
+### Required changes
+After installation and preparating the prerequisites, open the `Extract_config.py` file and update the router ip address, username and password to match your set of configured access in the router:<br>
+```bash
+from netmiko import ConnectHandler
+def extract_connfig(output):
+    device = ConnectHandler(device_type='cisco_ios', ip='<your router ip>', username='<router username>', password='<router password>')
+    output = device.send_command("show run")
+    device.disconnect() 
+```
+Once this done, just open the file `main.py` and run it. or you can make yours and add the following code:<br>
+```bash
+from extract_config import *
+from structure_config import *
+from analyze_config import *
+from print_config import *
+output = ""
+extract_connfig(output)
+structure(output)
+analyze(output)
+printing(output)
+```
+
+## Expected Output
+Sample output for the implemented work:<br>
+
+<img src="https://github.com/user-attachments/assets/00cda780-d3a4-4f8b-aea6-6bb20edcce4e" /><br>
+<p align='center'>Figure: The output of a sample router's configuration result</p>
+
 
