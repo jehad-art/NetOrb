@@ -10,7 +10,7 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
 
 ## Table of Content
 
-- [Prerequisites]("#Prerequisites")
+- [Prerequisites](#Prerequisites)
 - [Table of Content](#table-of-content)
 - [Environment Preparation](#env-description)
 - [Virtual Network topology](#topology)
