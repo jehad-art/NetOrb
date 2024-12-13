@@ -61,9 +61,26 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.<br>
 <h2>Initial Configuration</h2>
 <b>Sample configuration applied to the router</b><br>
 <img src="https://github.com/user-attachments/assets/309f22d4-7234-419e-9707-3bef64f04a8a" /><br>
-<p>Figure: snippet of sample Cisco IOSv12 configuration</p>
-```bash
+<p>Figure: snippet of sample Cisco IOSv12 configuration</p><br>
 
+## Getting Started
+### Download the code locally
+Using the `git` command from the terminal:
+
+```bash
+$ git clone https://github.com/jehad-art/NetOrb
 ```
 
+or by clicking on `Code >> Local >> Download ZIP` on the repository main page.
+
+### Install required Packages
+You can install all these dependencies using `pip`:<br>
+`Netmiko`<br>
+```bash
+pip install netmiko 
+```
+`prettytable`<br>
+```bash
+python -m pip install -U prettytable 
+```
 
