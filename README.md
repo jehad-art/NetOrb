@@ -120,7 +120,11 @@ printing(output)
 Sample output for the implemented work:<br>
 
 <img src="https://github.com/user-attachments/assets/00cda780-d3a4-4f8b-aea6-6bb20edcce4e" /><br>
-<p align='center'>Figure: The output of a sample router's configuration result</p>
+<p align='center'>Figure: The output of a sample router's configuration result</p><br><br>
+
+
+[![image](https://github.com/user-attachments/assets/adf50973-c55f-4203-a40c-7f2385a479cf)](https://youtu.be/Q3LzE3wRGoY)
+
 
 ## References
 [1] <a href="https://ieeexplore.ieee.org/document/9623186"> H. M. D. G. V. Perera, K. M. Samarasekara, I. U. K. Hewamanna, D. N. W. Kasthuriarachchi, K. Y. Abeywardena and K. Yapa, "NetBot - An Automated Router Hardening Solution for Small to Medium Enterprises," 2021 IEEE 12th Annual Information Technology, Electronics and Mobile Communication Conference (IEMCON), Vancouver, BC, Canada, 2021 </a>
