@@ -21,29 +21,30 @@ This is a proposed passive, automated solution for hardening the configurations 
         &emsp; - json (for configuration structure)<br>
         &emsp; - pretteytable (for data tabular view)<br>
         &emsp; - netmiko (for network access)<br>
-        &emsp; - GNS3 (for network emulation)<br>
-        &emsp; - GNS3 VM (Hosting VM and separating network adapters)<br>
     <b>Automation Tools:</b><br>
         &emsp; - Ansible (for large-scale router configuration management, optional)<br>
+    <b>Network Emulation</b><br>
+        &emsp; - Eve-ng (for network emulation)<br>
+        &emsp; - Eve-ng VM (Hosting VM and separating network adapters)<br>
 
 <h3>Hardware Requirements</h3>
 <b>System:</b><br>
-   &emsp; - Minimum 4 GB of RAM.<br>
-   &emsp; - Minimum 2 GHz dual-core CPU.<br>
+   &emsp; - Minimum 32 GB of RAM.<br>
+   &emsp; - Minimum 2 GHz dual-core CPU with 8 cores for the VM.<br>
 <b>Network:</b><br>
    &emsp; - Stable internet connection for fetching vulnerability updates and remote SSH access.<br>
 
 ## Environment Preparation
-<b>Install Network Emulation (GNS3)::</b><br>
+<b>Install Network Emulation (Eve-ng)::</b><br>
 - Install the client.<br>
-- Install GNS3 VM.<br>
+- Install Eve-ng VM.<br>
 - Configure the network setting in vmware to make it bridge network.<br>
 - Make sure the vm ip in the same subnet of the host’s.<br>
 - After client finishes installation, in the setup wizard, choose <b style="color:#006633;">“run appliance in a virtual machine” </b>.<br>
-- Install Cisco C3745 IOS v12.3.<br>
+- Install the intended virtual system (if it is node in eve-ng, it must be qcow2 file).<br>
 - Configure the preferences to add the run through local vm<br>
 - Add a new template device with the installed image<br>
-- Creating a loopback adapter and connect it through cloud template<br><br>
+- Creating a new network adapter from within the virtualization system and connect it through cloud template<br><br>
 
 ![image](https://github.com/user-attachments/assets/f0ee65b9-2660-418e-a7cb-6dc3d70b9260)
 <br><br><br>
@@ -122,7 +123,4 @@ Sample output for the implemented work:<br>
 
 [![image](https://github.com/user-attachments/assets/adf50973-c55f-4203-a40c-7f2385a479cf)](https://youtu.be/Q3LzE3wRGoY)
 
-
-## References
-[1] <a href="https://ieeexplore.ieee.org/document/9623186"> H. M. D. G. V. Perera, K. M. Samarasekara, I. U. K. Hewamanna, D. N. W. Kasthuriarachchi, K. Y. Abeywardena and K. Yapa, "NetBot - An Automated Router Hardening Solution for Small to Medium Enterprises," 2021 IEEE 12th Annual Information Technology, Electronics and Mobile Communication Conference (IEMCON), Vancouver, BC, Canada, 2021 </a>
 
