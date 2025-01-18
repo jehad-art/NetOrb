@@ -1,11 +1,9 @@
-# NetBot - An Automated Router Hardening Solution for Small to Medium Enterprises
+# NetOrb - An Automated Network security Hardening
 
 <h2>Abstract</h2>
 Hardening the configuration of network assets has become an essential practice for both General-Purpose and Special-Purpose Operating Systems. Security regulations and standards mandate this process to minimize the risk of misconfiguration, which can lead to significant operational and security vulnerabilities. Misconfigurations leave networks exposed to various types of attacks, compromising the confidentiality, integrity, and availability (CIA) of critical assets. Network administrators often lack the specialized expertise required to implement security configurations, as their primary focus is typically on maintaining network performance and operational efficiency.
 
-here, we are proposing a passive, automated solution for hardening the configurations of Special-Purpose network systems. The solution identifies critical assets and analyzes them for potential misconfigurations. It is designed to address all aspects of network security, including asset configuration, architectural segmentation, and Defense-In-Depth strategies.
-
-This is an implementation of the paper made by H. M. D. G. V. Perera et al.[1]<br>
+This is a proposed passive, automated solution for hardening the configurations of the network architecture. The solution identifies critical assets and analyzes them for potential misconfigurations. It is designed to address all aspects of network security, including asset configuration, architectural segmentation, and Defense-In-Depth strategies.
 
 ## Table of Content
 
