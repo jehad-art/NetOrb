@@ -53,8 +53,7 @@ This is an implementation of the paper made by H. M. D. G. V. Perera et al.[1]<b
 <p>Figure: Required settings for GNS3 VM</p>
 
 ## Virtual Network topology
-<img src="https://github.com/user-attachments/assets/c934e534-911c-4986-8429-889e5e0d1687" />
-
+<img src="https://github.com/user-attachments/assets/a2cce0ee-4db9-4420-8955-710239a62c6f" />
 <br>
 <p align='center'>Figure: The somulated network topology</p>
 <br>
