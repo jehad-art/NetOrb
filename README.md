@@ -44,12 +44,12 @@ This is a proposed passive, automated solution for hardening the configurations 
 - Install the intended virtual system (if it is node in eve-ng, it must be qcow2 file).<br>
 - Configure the preferences to add the run through local vm<br>
 - Add a new template device with the installed image<br>
-- Creating a new network adapter from within the virtualization system and connect it through cloud template<br><br>
+- Creating a new network adapter from within the virtualization system<br>
+- After creating the virtual adapter and assiging an ip to it, assign an ip to eve-ng vm in the same subnet to any interface that would be selected for the cloud node which will be addedinside eve-ng. see below on how to do it by accessing the file in ```bash cat /etc/network/interfaces``` :<br>
 
-![image](https://github.com/user-attachments/assets/f0ee65b9-2660-418e-a7cb-6dc3d70b9260)
-<br><br><br>
-![image](https://github.com/user-attachments/assets/62e196fa-f1d4-4b22-be9f-797eaa22516f)<br>
-<p>Figure: Required settings for GNS3 VM</p>
+![image](https://github.com/user-attachments/assets/92a7adff-0945-493b-ada4-c471eb6a7b90)
+<br>
+<p>Figure: Required settings for eve-ng VM</p>
 
 ## Virtual Network topology
 <img src="https://github.com/user-attachments/assets/a2cce0ee-4db9-4420-8955-710239a62c6f" />
