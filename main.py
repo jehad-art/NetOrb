@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from routes.devices import router as device_router
 from settings import settings
 from fastapi.middleware.cors import CORSMiddleware
+from routes.collector import router as collector_router
 
 app = FastAPI(title="Network Security SaaS")
 
@@ -14,6 +15,7 @@ app.add_middleware(
 )
 
 app.include_router(device_router, prefix="/devices", tags=["Devices"])
+app.include_router(collector_router, tags=["Collector"])
 
 @app.get("/")
 def root():

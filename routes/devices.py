@@ -1,6 +1,5 @@
-# routes/devices.py
 from fastapi import APIRouter, Body, Header, HTTPException
-from db import devices_collection
+from db import devices_collection, configs_collection
 from models import DeviceIn, DeviceOut
 from datetime import datetime
 from crypto_utils import encrypt_credentials, decrypt_credentials
@@ -44,3 +43,9 @@ def get_credentials(ip: str, authorization: str = Header(...)):
 
     decrypted = decrypt_credentials(device["credentials"])
     return decrypted
+
+@router.post("/submit_config")
+def submit_config(data: dict = Body(...)):
+    data["received_at"] = datetime.utcnow().isoformat()
+    configs_collection.insert_one(data)
+    return {"message": "Configuration received"}
