@@ -1,7 +1,10 @@
-from fastapi import APIRouter
+# routes/devices.py
+from fastapi import APIRouter, Body, Header, HTTPException
 from db import devices_collection
 from models import DeviceIn, DeviceOut
 from datetime import datetime
+from crypto_utils import encrypt_credentials, decrypt_credentials
+from settings import settings
 
 router = APIRouter()
 
@@ -15,4 +18,29 @@ def register_device(device: DeviceIn):
 
 @router.get("/")
 def list_devices():
-    return list(devices_collection.find({}, {"_id": 0}))
+    return list(devices_collection.find({}, {"_id": 0, "credentials": 0}))
+
+@router.put("/{ip}")
+def update_device(ip: str, device: dict = Body(...)):
+    if "credentials" in device and isinstance(device["credentials"], dict):
+        device["credentials"] = encrypt_credentials(device["credentials"])
+
+    device["last_seen"] = datetime.utcnow().isoformat()
+    result = devices_collection.update_one({"ip": ip}, {"$set": device})
+
+    if result.matched_count == 0:
+        return {"message": "Device not found"}
+    return {"message": "Device updated"}
+
+@router.get("/secrets/{ip}")
+def get_credentials(ip: str, authorization: str = Header(...)):
+    expected_token = f"Bearer {settings.agent_token}"
+    if authorization != expected_token:
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+    device = devices_collection.find_one({"ip": ip}, {"_id": 0, "credentials": 1})
+    if not device or "credentials" not in device:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    decrypted = decrypt_credentials(device["credentials"])
+    return decrypted
