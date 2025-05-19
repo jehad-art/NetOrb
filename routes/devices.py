@@ -4,6 +4,8 @@ from models import DeviceIn, DeviceOut
 from datetime import datetime
 from crypto_utils import encrypt_credentials, decrypt_credentials
 from settings import settings
+from analyzer.analyzer import analyze_config
+from db import configs_collection
 
 router = APIRouter()
 
@@ -46,6 +48,15 @@ def get_credentials(ip: str, authorization: str = Header(...)):
 
 @router.post("/submit_config")
 def submit_config(data: dict = Body(...)):
+    device_type = data.get("sections", {}).get("device_type", "router")  # fallback default
+    analysis = analyze_config(data.get("sections", {}), device_type)
+
+    data["analysis"] = analysis
     data["received_at"] = datetime.utcnow().isoformat()
+
     configs_collection.insert_one(data)
-    return {"message": "Configuration received"}
+    return {
+        "message": "Configuration and analysis received",
+        "score": analysis.get("score", 0),
+        "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", []))
+    }
