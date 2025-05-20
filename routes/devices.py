@@ -60,5 +60,6 @@ def submit_config(data: dict = Body(...)):
     return {
         "message": "Configuration and analysis received",
         "score": analysis.get("score", 0),
-        "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", []))
+        "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", [])),
+        "analysis": analysis  # TEMPORARY for debug
     }
