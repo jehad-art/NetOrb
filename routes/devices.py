@@ -63,3 +63,7 @@ def submit_config(data: dict = Body(...)):
         "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", [])),
         "analysis": analysis  # TEMPORARY for debug
     }
+
+@router.get("/configs")
+def get_configs():
+    return list(configs_collection.find({}, {"_id": 0}))
