@@ -61,7 +61,13 @@ def submit_config(data: dict = Body(...)):
         "message": "Configuration and analysis received",
         "score": analysis.get("score", 0),
         "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", [])),
-        "analysis": analysis  # TEMPORARY for debug
+        "analysis": analysis,
+        "debug": {
+            "device_type": device_type,
+            "section_keys": list(data.get("sections", {}).keys()),
+            "parsed_keys": list(data.get("sections", {}).get("parsed_config", {}).keys()),
+            "rules_loaded": analysis.get("rules_loaded", [])
+        }
     }
 
 @router.get("/configs")
