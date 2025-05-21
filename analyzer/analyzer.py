@@ -23,7 +23,8 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         "access_lists": access_lists,
         "sections": sections
     }
-
+    print(f"[DEBUG] Analyzing config for type: {device_type}")
+    print(f"[DEBUG] Sections keys: {list(sections.keys())}")
     ruleset = RULE_MAP.get(device_type, {})
     misconfigurations = []
     missing_recommendations = []
