@@ -14,50 +14,37 @@ RULE_MAP = {
 }
 
 def analyze_config(sections: dict, device_type: str) -> dict:
-    parsed = sections.get("parsed_config", {})
-    raw = sections.get("raw_config", [])
-    access_lists = sections.get("access_lists", [])
-    data = {
-        "parsed": parsed,
-        "raw": raw,
-        "access_lists": access_lists,
-        "sections": sections
-    }
-    print(f"[DEBUG] Analyzing config for type: {device_type}")
-    print(f"[DEBUG] Sections keys: {list(sections.keys())}")
-    ruleset = RULE_MAP.get(device_type, {})
+    from .base_rules import BASE_RULES
+    if device_type == "router":
+        from .router_rules import ROUTER_RULES as DEVICE_RULES
+    elif device_type == "switch":
+        from .switch_rules import SWITCH_RULES as DEVICE_RULES
+    else:
+        DEVICE_RULES = []
+
+    rules = BASE_RULES + DEVICE_RULES
+
     misconfigurations = []
     missing_recommendations = []
 
-    for rule in ruleset.get("misconfigurations", []):
+    for rule in rules:
         try:
-            if rule["check"](data):
-                misconfigurations.append({
-                    "type": rule["id"],
-                    "severity": rule["severity"],
-                    "description": rule["description"],
-                    "category": "misconfiguration"
-                })
+            result = rule(sections)
+            if result and isinstance(result, dict):
+                if result.get("type") == "recommendation":
+                    missing_recommendations.append(result)
+                else:
+                    misconfigurations.append(result)
         except Exception as e:
-            print(f"[!] Error in rule {rule['id']}: {e}")
+            print(f"[!] Rule error: {rule.__name__} - {e}")
 
-    for rule in ruleset.get("missing_recommendations", []):
-        try:
-            if rule["check"](data):
-                missing_recommendations.append({
-                    "type": rule["id"],
-                    "severity": rule["severity"],
-                    "description": rule["description"],
-                    "category": "missing_recommendation"
-                })
-        except Exception as e:
-            print(f"[!] Error in rule {rule['id']}: {e}")
+    score = 100 - len(misconfigurations) * 10 - len(missing_recommendations) * 5
 
-    issues = misconfigurations + missing_recommendations
     return {
+        "score": max(0, min(score, 100)),
         "misconfigurations": misconfigurations,
         "missing_recommendations": missing_recommendations,
-        "score": calculate_security_score(issues)
+        "rules_loaded": [r.__name__ for r in rules]  # <-- Add this
     }
 
 
