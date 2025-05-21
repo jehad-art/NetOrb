@@ -15,13 +15,16 @@ RULE_MAP = {
 
 def analyze_config(sections: dict, device_type: str) -> dict:
     from .base_rules import BASE_RULES
-    if device_type == "router":
-        from .router_rules import ROUTER_RULES as DEVICE_RULES
-    elif device_type == "switch":
-        from .switch_rules import SWITCH_RULES as DEVICE_RULES
-    else:
+    try:
+        if device_type == "router":
+            from .router_rules import ROUTER_RULES as DEVICE_RULES
+        elif device_type == "switch":
+            from .switch_rules import SWITCH_RULES as DEVICE_RULES
+        else:
+            DEVICE_RULES = []
+    except Exception as e:
+        print(f"[!] Failed to load rules for {device_type}: {e}")
         DEVICE_RULES = []
-
     rules = BASE_RULES + DEVICE_RULES
 
     misconfigurations = []

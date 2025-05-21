@@ -52,6 +52,11 @@ def submit_config(data: dict = Body(...)):
     device_type = data.get("sections", {}).get("device_type", "cisco_ios")
     analysis = analyze_config(data.get("sections", {}), device_type)
 
+    try:
+        analysis = analyze_config(data.get("sections", {}), device_type)
+    except Exception as e:
+        print(f"[!] Analyzer crash: {e}")
+        raise HTTPException(status_code=500, detail="Analyzer failure")
     data["analysis"] = analysis
     data["received_at"] = datetime.utcnow().isoformat()
     print(f"Analysis result: {json.dumps(analysis, indent=2)}")
