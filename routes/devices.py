@@ -49,7 +49,7 @@ def get_credentials(ip: str, authorization: str = Header(...)):
 
 @router.post("/submit_config")
 def submit_config(data: dict = Body(...)):
-    device_type = data.get("sections", {}).get("device_type", "router")
+    device_type = data.get("sections", {}).get("device_type", "cisco_ios")
     analysis = analyze_config(data.get("sections", {}), device_type)
 
     data["analysis"] = analysis
