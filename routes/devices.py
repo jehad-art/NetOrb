@@ -69,7 +69,12 @@ def submit_config(data: dict = Body(...)):
     data["received_at"] = datetime.utcnow().isoformat()
     print(f"Analysis result: {json.dumps(analysis, indent=2)}")
 
-    configs_collection.insert_one(data)
+    result = configs_collection.update_one(
+        {"device_ip": data.get("device_ip")},
+        {"$set": data},
+        upsert=True
+    )
+    
     return {
         "message": "Configuration and analysis received",
         "score": analysis.get("score", 0),
@@ -79,7 +84,9 @@ def submit_config(data: dict = Body(...)):
             "device_type": device_type,
             "section_keys": list(data.get("sections", {}).keys()),
             "parsed_keys": list(data.get("sections", {}).get("parsed_config", {}).keys()),
-            "rules_loaded": analysis.get("rules_loaded", [])
+            "rules_loaded": analysis.get("rules_loaded", []),
+            "upserted": result.upserted_id is not None,
+            "updated_existing": result.matched_count
         }
     }
 
