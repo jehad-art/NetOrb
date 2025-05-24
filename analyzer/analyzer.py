@@ -22,6 +22,8 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         "misconfigurations": BASE_RULES.get("misconfigurations", []) + DEVICE_RULES.get("misconfigurations", []),
         "missing_recommendations": BASE_RULES.get("missing_recommendations", []) + DEVICE_RULES.get("missing_recommendations", [])
     }
+    print("[Loaded misconfigs]:", [r["tag"] for r in rules["misconfigurations"]])
+    print("[Loaded recs]:", [r["tag"] for r in rules["missing_recommendations"]])
 
     misconfigurations = []
     missing_recommendations = []
