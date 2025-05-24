@@ -16,16 +16,15 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         print(f"[!] Failed to load rules for {device_type}: {e}")
         DEVICE_RULES = {"misconfigurations": [], "missing_recommendations": []}
 
-    # Combine both base and device-specific rules
+    # Merge rules
     rules = {
-        "misconfigurations": BASE_RULES["misconfigurations"] + DEVICE_RULES["misconfigurations"],
-        "missing_recommendations": BASE_RULES["missing_recommendations"] + DEVICE_RULES["missing_recommendations"]
+        "misconfigurations": BASE_RULES.get("misconfigurations", []) + DEVICE_RULES.get("misconfigurations", []),
+        "missing_recommendations": BASE_RULES.get("missing_recommendations", []) + DEVICE_RULES.get("missing_recommendations", [])
     }
 
     misconfigurations = []
     missing_recommendations = []
 
-    # Evaluate misconfiguration rules
     for rule in rules["misconfigurations"]:
         try:
             if rule["check"](sections):
@@ -33,7 +32,6 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         except Exception as e:
             print(f"[!] Rule error: {rule.get('tag', 'unknown')} - {e}")
 
-    # Evaluate missing recommendations
     for rule in rules["missing_recommendations"]:
         try:
             if rule["check"](sections):
@@ -49,6 +47,7 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         "missing_recommendations": missing_recommendations,
         "rules_loaded": [r["tag"] for r in rules["misconfigurations"] + rules["missing_recommendations"]]
     }
+
 
 
 def calculate_security_score(issues: list) -> int:
