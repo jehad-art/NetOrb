@@ -4,6 +4,12 @@ from .switch_rules import SWITCH_RULES
 
 
 def analyze_config(sections: dict, device_type: str) -> dict:
+    print("[DEBUG] sections keys:", sections.keys())
+    print("[DEBUG] raw_config sample:", sections.get("raw_config", [])[:5])
+    print("[DEBUG] parsed_config keys:", sections.get("parsed_config", {}).keys())
+    print("[DEBUG] normalized parsed enable:", normalized.get("parsed", {}).get("enable"))
+    print("[DEBUG] normalized raw length:", len(normalized.get("raw", [])))
+
     from .base_rules import BASE_RULES
 
     try:
@@ -26,7 +32,7 @@ def analyze_config(sections: dict, device_type: str) -> dict:
     print("[Loaded misconfigs]:", [r["tag"] for r in rules["misconfigurations"]])
     print("[Loaded recs]:", [r["tag"] for r in rules["missing_recommendations"]])
 
-    # ✅ Normalize input for consistent rule evaluation
+    # Normalize input for consistent rule evaluation
     normalized = {
         "parsed": sections.get("parsed_config", {}),
         "raw": sections.get("raw_config", []),
