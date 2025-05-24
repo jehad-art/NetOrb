@@ -21,25 +21,26 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         elif device_type == "switch":
             from .switch_rules import SWITCH_RULES as DEVICE_RULES
         else:
-            DEVICE_RULES = []
+            DEVICE_RULES = {}
     except Exception as e:
         print(f"[!] Failed to load rules for {device_type}: {e}")
-        DEVICE_RULES = []
+        DEVICE_RULES = {}
+
     rules = {**BASE_RULES, **DEVICE_RULES}
 
     misconfigurations = []
     missing_recommendations = []
 
-    for rule in rules:
+    for rule_name, rule_func in rules.items():
         try:
-            result = rule(sections)
+            result = rule_func(sections)
             if result and isinstance(result, dict):
                 if result.get("type") == "recommendation":
                     missing_recommendations.append(result)
                 else:
                     misconfigurations.append(result)
         except Exception as e:
-            print(f"[!] Rule error: {rule.__name__} - {e}")
+            print(f"[!] Rule error: {rule_name} - {e}")
 
     score = 100 - len(misconfigurations) * 10 - len(missing_recommendations) * 5
 
@@ -47,7 +48,7 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         "score": max(0, min(score, 100)),
         "misconfigurations": misconfigurations,
         "missing_recommendations": missing_recommendations,
-        "rules_loaded": [r.__name__ for r in rules]  # <-- Add this
+        "rules_loaded": list(rules.keys())
     }
 
 
