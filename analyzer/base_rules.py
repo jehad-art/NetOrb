@@ -7,22 +7,24 @@ BASE_RULES = {
             "tag": "telnet_enabled",
             "severity": "high",
             "description": "Telnet is enabled on VTY lines.",
-            "check": lambda d: any("transport input telnet" in l for b in d.get("parsed", {}).get("vty", []) for l in b)
+            "check": lambda d: any("transport input telnet" in l.lower()
+                                   for b in d.get("parsed", {}).get("vty", []) for l in b)
         },
         {
             "id": "R03",
             "tag": "enable_plaintext",
             "severity": "high",
             "description": "Enable password is configured in plain text.",
-            "check": lambda d: d.get("parsed", {}).get("enable", {}).get("type") == "password"
+            "check": lambda d: d.get("parsed", {}).get("enable", {}).get("type", "").lower() == "password"
         },
         {
             "id": "R04",
             "tag": "password_no_encryption",
             "severity": "medium",
             "description": "Plain-text passwords found, but no encryption service enabled.",
-            "check": lambda d: any("password " in l for l in d.get("raw", [])) and
-                               not any("service password-encryption" in s for s in d.get("parsed", {}).get("services", []))
+            "check": lambda d: any("password " in l.lower() for l in d.get("raw", [])) and
+                               not any("service password-encryption" in s.lower()
+                                       for s in d.get("parsed", {}).get("services", []))
         },
         {
             "id": "R05",
@@ -39,6 +41,16 @@ BASE_RULES = {
             "description": "SSH version 1 is enabled.",
             "check": lambda d: any("ip ssh version 1" in l.lower() for l in d.get("raw", []))
         },
+        {
+            "id": "R16",
+            "tag": "username_plaintext_password",
+            "severity": "medium",
+            "description": "Username has a plaintext password and encryption is not enabled.",
+            "check": lambda d: any("username " in l.lower() and " password " in l.lower() and "secret" not in l.lower()
+                                   for l in d.get("raw", [])) and
+                               not any("service password-encryption" in s.lower()
+                                       for s in d.get("parsed", {}).get("services", []))
+        }
     ],
 
     "missing_recommendations": [
@@ -47,14 +59,14 @@ BASE_RULES = {
             "tag": "ssh_v2_missing",
             "severity": "high",
             "description": "SSH version 2 not configured.",
-            "check": lambda d: not any("ip ssh version 2" in l for l in d.get("raw", []))
+            "check": lambda d: not any("ip ssh version 2" in l.lower() for l in d.get("raw", []))
         },
         {
             "id": "R18",
             "tag": "service_encryption_missing",
             "severity": "medium",
             "description": "Service password-encryption is not configured.",
-            "check": lambda d: not any("service password-encryption" in s
+            "check": lambda d: not any("service password-encryption" in s.lower()
                                        for s in d.get("parsed", {}).get("services", []))
         }
     ]
