@@ -2,6 +2,9 @@ from .base_rules import BASE_RULES
 from .router_rules import ROUTER_RULES
 from .switch_rules import SWITCH_RULES
 
+def strip_check_field(rules):
+    return [{k: v for k, v in rule.items() if k != "check"} for rule in rules]
+
 def analyze_config(sections: dict, device_type: str) -> dict:
     from .base_rules import BASE_RULES
 
@@ -42,11 +45,11 @@ def analyze_config(sections: dict, device_type: str) -> dict:
     score = 100 - len(misconfigurations) * 10 - len(missing_recommendations) * 5
 
     return {
-        "score": max(0, min(score, 100)),
-        "misconfigurations": misconfigurations,
-        "missing_recommendations": missing_recommendations,
-        "rules_loaded": [r["tag"] for r in rules["misconfigurations"] + rules["missing_recommendations"]]
-    }
+    "score": max(0, min(score, 100)),
+    "misconfigurations": strip_check_field(misconfigurations),
+    "missing_recommendations": strip_check_field(missing_recommendations),
+    "rules_loaded": [r["tag"] for r in misconfigurations + missing_recommendations]
+}
 
 
 
