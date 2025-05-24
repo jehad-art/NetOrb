@@ -17,27 +17,39 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         print(f"[!] Failed to load rules for {device_type}: {e}")
         DEVICE_RULES = {"misconfigurations": [], "missing_recommendations": []}
 
-    # Merge rules
+    # Merge base + device-specific rules
     rules = {
         "misconfigurations": BASE_RULES.get("misconfigurations", []) + DEVICE_RULES.get("misconfigurations", []),
         "missing_recommendations": BASE_RULES.get("missing_recommendations", []) + DEVICE_RULES.get("missing_recommendations", [])
     }
+
     print("[Loaded misconfigs]:", [r["tag"] for r in rules["misconfigurations"]])
     print("[Loaded recs]:", [r["tag"] for r in rules["missing_recommendations"]])
+
+    # ✅ Normalize input for consistent rule evaluation
+    normalized = {
+        "parsed": sections.get("parsed_config", {}),
+        "raw": sections.get("raw_config", []),
+        **sections
+    }
 
     misconfigurations = []
     missing_recommendations = []
 
     for rule in rules["misconfigurations"]:
         try:
-            if rule["check"](sections):
+            result = rule["check"](normalized)
+            print(f"[DEBUG] {rule['tag']} => {result}")  # Print match result
+            if result:
                 misconfigurations.append(rule)
         except Exception as e:
             print(f"[!] Rule error: {rule.get('tag', 'unknown')} - {e}")
 
     for rule in rules["missing_recommendations"]:
         try:
-            if rule["check"](sections):
+            result = rule["check"](normalized)
+            print(f"[DEBUG] {rule['tag']} => {result}")  # Print match result
+            if result:
                 missing_recommendations.append(rule)
         except Exception as e:
             print(f"[!] Rule error: {rule.get('tag', 'unknown')} - {e}")
@@ -48,11 +60,12 @@ def analyze_config(sections: dict, device_type: str) -> dict:
     score = 100 - len(misconfigurations) * 10 - len(missing_recommendations) * 5
 
     return {
-    "score": max(0, min(score, 100)),
-    "misconfigurations": strip_check_field(misconfigurations),
-    "missing_recommendations": strip_check_field(missing_recommendations),
-    "rules_loaded": [r["tag"] for r in misconfigurations + missing_recommendations]
-}
+        "score": max(0, min(score, 100)),
+        "misconfigurations": strip_check_field(misconfigurations),
+        "missing_recommendations": strip_check_field(missing_recommendations),
+        "rules_loaded": [r["tag"] for r in misconfigurations + missing_recommendations]
+    }
+
 
 
 
