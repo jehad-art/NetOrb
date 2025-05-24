@@ -25,7 +25,7 @@ def analyze_config(sections: dict, device_type: str) -> dict:
     except Exception as e:
         print(f"[!] Failed to load rules for {device_type}: {e}")
         DEVICE_RULES = []
-    rules = BASE_RULES + DEVICE_RULES
+    rules = {**BASE_RULES, **DEVICE_RULES}
 
     misconfigurations = []
     missing_recommendations = []
