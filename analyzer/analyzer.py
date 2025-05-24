@@ -7,8 +7,7 @@ def analyze_config(sections: dict, device_type: str) -> dict:
     print("[DEBUG] sections keys:", sections.keys())
     print("[DEBUG] raw_config sample:", sections.get("raw_config", [])[:5])
     print("[DEBUG] parsed_config keys:", sections.get("parsed_config", {}).keys())
-    print("[DEBUG] normalized parsed enable:", normalized.get("parsed", {}).get("enable"))
-    print("[DEBUG] normalized raw length:", len(normalized.get("raw", [])))
+    
 
     from .base_rules import BASE_RULES
 
@@ -38,6 +37,8 @@ def analyze_config(sections: dict, device_type: str) -> dict:
         "raw": sections.get("raw_config", []),
         **sections
     }
+    print("[DEBUG] normalized parsed enable:", normalized.get("parsed", {}).get("enable"))
+    print("[DEBUG] normalized raw length:", len(normalized.get("raw", [])))
 
     misconfigurations = []
     missing_recommendations = []
