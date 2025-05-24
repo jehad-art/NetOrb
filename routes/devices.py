@@ -2,13 +2,21 @@ from fastapi import APIRouter, Body, Header, HTTPException
 from db import devices_collection, configs_collection
 from models import DeviceIn, DeviceOut
 from datetime import datetime
-from crypto_utils import encrypt_credentials, decrypt_credentials
+from cryptography.fernet import Fernet
 from settings import settings
 from analyzer.analyzer import analyze_config
 from db import configs_collection
 import json
 
 router = APIRouter()
+
+fernet = Fernet(settings.fernet_key.encode())
+
+def encrypt_credentials(data: dict) -> str:
+    return fernet.encrypt(json.dumps(data).encode()).decode()
+
+def decrypt_credentials(token: str) -> dict:
+    return json.loads(fernet.decrypt(token.encode()).decode())
 
 @router.post("/discovered")
 def register_device(device: DeviceIn):
