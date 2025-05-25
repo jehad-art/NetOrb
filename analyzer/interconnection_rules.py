@@ -1,14 +1,22 @@
-# interconnection_rules.py
 
 def find_trunk_mismatches(all_configs: list) -> list:
     issues = []
 
-    device_map = {cfg["device_ip"]: cfg for cfg in all_configs}
+    # Build map safely
+    device_map = {
+        cfg.get("device_ip"): cfg
+        for cfg in all_configs
+        if cfg.get("device_ip")
+    }
 
     for device in all_configs:
-        device_ip = device["device_ip"]
+        device_ip = device.get("device_ip")
+        if not device_ip:
+            print(f"[!] Skipping config with missing device_ip: {device}")
+            continue
+
         hostname = device.get("hostname", device_ip)
-        interfaces = device["sections"].get("interfaces", [])
+        interfaces = device.get("sections", {}).get("interfaces", [])
 
         for iface in interfaces:
             local_port = iface.get("name")
@@ -21,11 +29,11 @@ def find_trunk_mismatches(all_configs: list) -> list:
             neighbor_id = neighbor_info.get("device_id")
             neighbor_port = neighbor_info.get("port_id")
 
-            # Find matching peer
+            # Match peer
             for peer in all_configs:
-                peer_hostname = peer.get("hostname", peer["device_ip"])
+                peer_hostname = peer.get("hostname", peer.get("device_ip", ""))
                 if neighbor_id in peer_hostname:
-                    for peer_iface in peer["sections"].get("interfaces", []):
+                    for peer_iface in peer.get("sections", {}).get("interfaces", []):
                         if peer_iface.get("name") == neighbor_port:
                             peer_mode = peer_iface.get("mode", "").lower()
                             if local_mode != peer_mode:
@@ -38,6 +46,7 @@ def find_trunk_mismatches(all_configs: list) -> list:
                                 })
                             break
                     break
+
     return issues
 
 

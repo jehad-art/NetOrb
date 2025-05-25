@@ -69,7 +69,7 @@ def submit_config(data: dict = Body(...)):
     try:
         analysis = analyze_config(data.get("sections", {}), device_type)
     except Exception as e:
-        print(f"[!] Analyzer crash: {e}")
+        print(f"Analyzer crash: {e}")
         raise HTTPException(status_code=500, detail="Analyzer failure")
     
     # Load all configs from DB
