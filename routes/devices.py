@@ -5,6 +5,7 @@ from datetime import datetime
 from cryptography.fernet import Fernet
 from settings import settings
 from analyzer.analyzer import analyze_config
+from analyzer.interconnection_rules import analyze_interconnections
 from db import configs_collection
 import json
 
@@ -55,6 +56,11 @@ def get_credentials(ip: str, authorization: str = Header(...)):
     decrypted = decrypt_credentials(device["credentials"])
     return decrypted
 
+@router.get("/interconnection_issues")
+def get_interconnection_issues():
+    all_configs = list(configs_collection.find({}, {"_id": 0}))
+    return analyze_interconnections(all_configs)
+
 @router.post("/submit_config")
 def submit_config(data: dict = Body(...)):
     device_type = data.get("sections", {}).get("device_type", "router")
@@ -65,6 +71,21 @@ def submit_config(data: dict = Body(...)):
     except Exception as e:
         print(f"[!] Analyzer crash: {e}")
         raise HTTPException(status_code=500, detail="Analyzer failure")
+    
+    # Load all configs from DB
+    all_configs = list(configs_collection.find({}, {"_id": 0}))
+
+    # Temporarily include the current config (not yet inserted)
+    all_configs.append(data)
+
+    # Analyze interconnection-level issues
+    try:
+        interconnection_results = analyze_interconnections(all_configs)
+        analysis["interconnection_issues"] = interconnection_results.get("interconnection_issues", [])
+    except Exception as e:
+        print(f"[!] Interconnection analysis failed: {e}")
+        analysis["interconnection_issues"] = []
+
     data["analysis"] = analysis
     data["received_at"] = datetime.utcnow().isoformat()
     print(f"Analysis result: {json.dumps(analysis, indent=2)}")
@@ -74,11 +95,15 @@ def submit_config(data: dict = Body(...)):
         {"$set": data},
         upsert=True
     )
-    
+
     return {
         "message": "Configuration and analysis received",
         "score": analysis.get("score", 0),
-        "issues": len(analysis.get("misconfigurations", [])) + len(analysis.get("missing_recommendations", [])),
+        "issues": (
+            len(analysis.get("misconfigurations", [])) +
+            len(analysis.get("missing_recommendations", [])) +
+            len(analysis.get("interconnection_issues", []))
+        ),
         "analysis": analysis,
         "debug": {
             "device_type": device_type,
