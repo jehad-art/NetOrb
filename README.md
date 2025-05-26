@@ -1,3 +1,61 @@
+# NetOrb Backend
+
+**NetOrb** is a network security configuration analysis platform designed to automate the discovery, auditing, and hardening of special-purpose infrastructure devices — including routers, switches, and firewalls. This backend is built with **FastAPI** and supports agent-based config collection, rule-based security analysis, and cross-device interconnection validation.
+
+---
+
+## Features
+
+- **Security Analysis Engine**: Detects misconfigurations and missing security best practices per device.
+- **Interconnection Checks**: Identifies mismatches between switch ports and rogue device connections.
+- **FastAPI Backend**: Handles config ingestion, analysis, and secure credential access.
+- **Rule-Based Analyzer**:
+  - Device-specific rules (e.g., Cisco IOS routers/switches)
+  - Shared base rules (e.g., telnet enabled, plaintext passwords)
+  - Interconnection rules (e.g., trunk mismatches, bypassed security zones)
+- **Agent-Compatible**: Works with a lightweight Python agent running inside EVE-NG or other labs.
+
+---
+
+## Project Structure
+NetOrb/
+├── analyzer/
+│ ├── analyzer.py # Main analysis logic
+│ ├── base_rules.py # Generic security checks
+│ ├── router_rules.py # Router-specific rules
+│ ├── switch_rules.py # Switch-specific rules
+│ ├── interconnection_rules.py # Cross-device analysis
+├── db.py # MongoDB collections
+├── devices.py # FastAPI router for config endpoints
+├── crypto_utils.py # Fernet encryption/decryption
+├── settings.py # App settings and agent token
+
+---
+
+## 🔧 API Endpoints
+
+### `POST /devices/submit_config`
+
+Submit a full device configuration JSON for analysis.
+
+- Detects misconfigurations
+- Applies device-type specific rules
+- Performs interconnection analysis (if other devices exist)
+
+**Returns**:  
+```json
+{
+  "message": "Configuration and analysis received",
+  "score": 65,
+  "issues": 7,
+  "analysis": {
+    "misconfigurations": [...],
+    "missing_recommendations": [...],
+    "interconnection_issues": [...]
+  }
+}
+
+
 # NetOrb - An Automated Network security Hardening
 
 <h2>Abstract</h2>
