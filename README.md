@@ -24,59 +24,6 @@
 - **Agent-Compatible**: Works with a lightweight Python agent running inside EVE-NG or other labs.
 
 
-## Project Structure
-NetOrb/
-- analyzer/
-  - analyzer.py # Main analysis logic
-  - base_rules.py # Generic security checks
-  - router_rules.py # Router-specific rules
-  - switch_rules.py # Switch-specific rules
-  - interconnection_rules.py # Cross-device analysis
-- db.py # MongoDB collections
-- routes
-  - devices.py # FastAPI router for config endpoints
-- crypto_utils.py # Fernet encryption/decryption
-- settings.py # App settings and agent token
-
-
-## API Endpoints
-
-### `POST /devices/submit_config`
-
-Submit a full device configuration JSON for analysis.
-
-- Detects misconfigurations
-- Applies device-type specific rules
-- Performs interconnection analysis (if other devices exist)
-
-**Returns**:  
-```json
-{
-  "message": "Configuration and analysis received",
-  "score": 65,
-  "issues": 7,
-  "analysis": {
-    "misconfigurations": [],
-    "missing_recommendations": [],
-    "interconnection_issues": []
-  }
-}
-```
-### `GET /devices/`
-
-Returns a list of all discovered/provisioned devices.
-### `GET /devices/secrets/{ip}`
-
-Returns decrypted credentials for the agent (protected by token auth).
-### `POST /devices/discovered`
-
-Registers or updates a discovered device (used by the agent after scanning).
-### `GET /interconnection_issues`
-
-Re-analyzes all saved configurations for interconnection issues only.
-
-
-
 ## Example Rules
 
 Misconfiguration
@@ -138,13 +85,9 @@ Interconnection Issues
 - Cloud running on backend: https://dashboard.render.com/web/srv-d0jt36juibrs73913hdg/logs<br>
 - Cloud running for database: mogodb atlas<br>
 
-## Run Locally
-```bash
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
 
 ## Virtual Network topology
+<img src="https://github.com/user-attachments/assets/1357cce1-db45-4682-b0f6-eb862b498d88" /><br>
 <p align='center'>Figure: The somulated network topology</p>
 <br>
 <h2>Initial Configuration</h2>
@@ -158,12 +101,12 @@ uvicorn main:app --reload
 - Device discovery via TCP scanning
 - Config extraction via SSH (Netmiko)
 - Mode + CDP neighbor parsing
-- Posts JSON configs to submit_config for full analysis
+- Posts JSON configs to `submit_config` for full analysis
 
 # Agent must include:
-- cdp_neighbors: output of show cdp neighbors detail
-- raw_config: full running config
-- interfaces: parsed with mode + neighbor info injected
+- `cdp_neighbors`: output of show `cdp neighbors detail`
+- `raw_config`: full running config
+- `interfaces`: parsed with mode + neighbor info injected
 
 ## Getting Started
 ### Download the code locally
@@ -177,54 +120,78 @@ or by clicking on `Code >> Local >> Download ZIP` on the repository main page.
 
 ### Install required Packages
 You can install all these dependencies using `pip`:<br>
-`Netmiko`<br>
 ```bash
-pip install netmiko 
+pip install -r requirements.txt
+uvicorn main:app --reload
 ```
-`prettytable`<br>
-```bash
-python -m pip install -U prettytable 
-```
+
 ### Implementation code structure
 The code structured into the following files:<br>
-- `Extract_config.py` (to extract the router configuration to a string variable)<br>
-- `Original_config.txt` (the extracted config)<br>
-- `Structure_config.py` (to read the extracted config and convert it to final json form)<br>
-- `Config_C3745.json` (structure file to be analyzed)<br>
-- `Analyze_config.py` (to analyze the structured file line by line and identify the misconfiguration and suggested fixes)<br>
-- `Print_config.py` (print the resultant output in a tabular format for human readable)<br>
-- `Main.py` (the main file to call all previous functions in and run it)<br>
+NetOrb/
+- analyzer/
+  - analyzer.py # Main analysis logic
+  - base_rules.py # Generic security checks
+  - router_rules.py # Router-specific rules
+  - switch_rules.py # Switch-specific rules
+  - interconnection_rules.py # Cross-device analysis
+- db.py # MongoDB collections
+- routes
+  - devices.py # FastAPI router for config endpoints
+- crypto_utils.py # Fernet encryption/decryption
+- settings.py # App settings and agent token
 
 
-### Required changes
-After installation and preparating the prerequisites, open the `Extract_config.py` file and update the router ip address, username and password to match your set of configured access in the router:<br>
-```bash
-from netmiko import ConnectHandler
-def extract_connfig(output):
-    device = ConnectHandler(device_type='cisco_ios', ip='<your router ip>', username='<router username>', password='<router password>')
-    output = device.send_command("show run")
-    device.disconnect() 
+## API Endpoints
+
+### `POST /devices/submit_config`
+
+Submit a full device configuration JSON for analysis.
+
+- Detects misconfigurations
+- Applies device-type specific rules
+- Performs interconnection analysis (if other devices exist)
+
+**Returns**:  
+```json
+{
+  "message": "Configuration and analysis received",
+  "score": 65,
+  "issues": 7,
+  "analysis": {
+    "misconfigurations": [],
+    "missing_recommendations": [],
+    "interconnection_issues": []
+  }
+}
 ```
-Once this done, just open the file `main.py` and run it. or you can make yours and add the following code:<br>
-```bash
-from extract_config import *
-from structure_config import *
-from analyze_config import *
-from print_config import *
-output = ""
-extract_connfig(output)
-structure(output)
-analyze(output)
-printing(output)
-```
+### `GET /devices/`
+
+Returns a list of all discovered/provisioned devices.
+### `GET /devices/secrets/{ip}`
+
+Returns decrypted credentials for the agent (protected by token auth).
+### `POST /devices/discovered`
+
+Registers or updates a discovered device (used by the agent after scanning).
+### `GET /interconnection_issues`
+
+Re-analyzes all saved configurations for interconnection issues only.
+
+ ## Notes
+
+- Interconnection issues only appear if both ends of a link are discovered.
+- Device hostname must match the `cdp_neighbor["device_id"]` for rules to link devices.
+- `mode` must be properly extracted from interface configs `(switchport mode)`
 
 ## Expected Output
 Sample output for the implemented work:<br>
 
-<img src="https://github.com/user-attachments/assets/00cda780-d3a4-4f8b-aea6-6bb20edcce4e" /><br>
-<p align='center'>Figure: The output of a sample router's configuration result</p><br><br>
+<img src="https://github.com/user-attachments/assets/7657a906-1edf-4264-82b5-0c45570b7db5" /><br>
+<p align='center'>Figure: The output of a sample device's configuration result</p><br><br>
 
 
-[![image](https://github.com/user-attachments/assets/adf50973-c55f-4203-a40c-7f2385a479cf)](https://youtu.be/Q3LzE3wRGoY)
+## Contact
+
+Developed as part of a cybersecurity MX project. For questions or contributions, open an issue or reach out via GitHub.
 
 
