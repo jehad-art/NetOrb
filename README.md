@@ -6,30 +6,30 @@
 ## Features
 
 - **Security Analysis Engine**: Detects misconfigurations and missing security best practices per device.
-- **Interconnection Checks**: Identifies mismatches between switch ports and rogue device connections.
+- **Interconnection Checks**: Identifies interconnection issues between devices and applies architecture validation.
 - **FastAPI Backend**: Handles config ingestion, analysis, and secure credential access.
 - **Rule-Based Analyzer**:
-  - Device-specific rules (e.g., Cisco IOS routers/switches)
-  - Shared base rules (e.g., telnet enabled, plaintext passwords)
+  - Device-specific rules (e.g., Cisco IOS routers/switches, Juniper, Aruba, etc.)
+  - Shared base rules (e.g., telnet enabled, plaintext passwords) in Cisco IOS L2 & L3.
   - Interconnection rules (e.g., trunk mismatches, bypassed security zones)
 - **Agent-Compatible**: Works with a lightweight Python agent running inside EVE-NG or other labs.
 
 
 ## Project Structure
 NetOrb/
-- ├── analyzer/
-- │ ├── analyzer.py # Main analysis logic
-- │ ├── base_rules.py # Generic security checks
-- │ ├── router_rules.py # Router-specific rules
-- │ ├── switch_rules.py # Switch-specific rules
-- │ ├── interconnection_rules.py # Cross-device analysis
-- ├── db.py # MongoDB collections
-- ├── devices.py # FastAPI router for config endpoints
-- ├── crypto_utils.py # Fernet encryption/decryption
-- ├── settings.py # App settings and agent token
+- analyzer/
+  - analyzer.py # Main analysis logic
+  - base_rules.py # Generic security checks
+  - router_rules.py # Router-specific rules
+  - switch_rules.py # Switch-specific rules
+  - interconnection_rules.py # Cross-device analysis
+- db.py # MongoDB collections
+- devices.py # FastAPI router for config endpoints
+- crypto_utils.py # Fernet encryption/decryption
+- settings.py # App settings and agent token
 
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### `POST /devices/submit_config`
 
