@@ -24,7 +24,8 @@ NetOrb/
   - switch_rules.py # Switch-specific rules
   - interconnection_rules.py # Cross-device analysis
 - db.py # MongoDB collections
-- devices.py # FastAPI router for config endpoints
+- routes
+  - devices.py # FastAPI router for config endpoints
 - crypto_utils.py # Fernet encryption/decryption
 - settings.py # App settings and agent token
 
@@ -65,22 +66,30 @@ Registers or updates a discovered device (used by the agent after scanning).
 
 Re-analyzes all saved configurations for interconnection issues only.
 
-🧪 Example Rules
+
+
+Example Rules
 Misconfiguration
-ID	Tag	Description
-R01	telnet_enabled	Telnet is enabled on VTY lines
-R03	enable_plaintext	Enable password stored in plaintext
-R09	nat_no_overload	NAT is used without overload flag
+| Rule ID | Description                                                  | Severity |
+|---------|--------------------------------------------------------------|----------|
+| R01   | Telnet is enabled on VTY lines   | High     |
+| R03   | enable_plaintext	Enable password stored in plaintext        | High     |
+| R09   | nat_no_overload	NAT is used without overload flag   | Medium   |
 Missing Recommendations
-ID	Tag	Description
-R17	ssh_v2_missing	SSH version 2 not configured
-R18	service_encryption_missing	Password encryption service is not enabled
+| Rule ID | Description                                                  | Severity |
+|---------|--------------------------------------------------------------|----------|
+| R17   | SSH version 2 not configured   | Medium     |
+| R18   | Password encryption service is not enabled   | Medium   |
 Interconnection Issues
-ID	Description
-INT01	Trunk mismatch between connected switch ports
-(planned) INT02	Trunk port connected to unknown/rogue device
-(planned) INT03	BPDU Guard / Root Guard misalignment across switches
-(planned) INT04	Firewall bypass: traffic reaching app server directly, skipping WAF
+| Rule ID | Description                                                  | Severity |
+|---------|--------------------------------------------------------------|----------|
+| INT01   | Trunk mismatch between connected switch ports   | Medium     |
+| INT02   | Trunk port connected to unknown/rogue device   | Medium   |
+| INT03   | BPDU Guard / Root Guard misalignment across switches   | High   |
+| INT04   | Firewall bypass: traffic reaching app server directly, skipping WAF   | Medium   |
+	
+	
+	
 # NetOrb - An Automated Network security Hardening
 
 <h2>Abstract</h2>
