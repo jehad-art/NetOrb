@@ -46,13 +46,41 @@ Submit a full device configuration JSON for analysis.
   "score": 65,
   "issues": 7,
   "analysis": {
-    "misconfigurations": [...],
-    "missing_recommendations": [...],
-    "interconnection_issues": [...]
+    "misconfigurations": [],
+    "missing_recommendations": [],
+    "interconnection_issues": []
   }
 }
 ```
+### `GET /devices/`
 
+Returns a list of all discovered/provisioned devices.
+### `GET /devices/secrets/{ip}`
+
+Returns decrypted credentials for the agent (protected by token auth).
+### `POST /devices/discovered`
+
+Registers or updates a discovered device (used by the agent after scanning).
+### `GET /interconnection_issues`
+
+Re-analyzes all saved configurations for interconnection issues only.
+
+🧪 Example Rules
+Misconfiguration
+ID	Tag	Description
+R01	telnet_enabled	Telnet is enabled on VTY lines
+R03	enable_plaintext	Enable password stored in plaintext
+R09	nat_no_overload	NAT is used without overload flag
+Missing Recommendations
+ID	Tag	Description
+R17	ssh_v2_missing	SSH version 2 not configured
+R18	service_encryption_missing	Password encryption service is not enabled
+Interconnection Issues
+ID	Description
+INT01	Trunk mismatch between connected switch ports
+(planned) INT02	Trunk port connected to unknown/rogue device
+(planned) INT03	BPDU Guard / Root Guard misalignment across switches
+(planned) INT04	Firewall bypass: traffic reaching app server directly, skipping WAF
 # NetOrb - An Automated Network security Hardening
 
 <h2>Abstract</h2>
