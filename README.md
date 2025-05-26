@@ -69,18 +69,24 @@ Re-analyzes all saved configurations for interconnection issues only.
 
 
 Example Rules
+
 Misconfiguration
+
 | Rule ID | Description                                                  | Severity |
 |---------|--------------------------------------------------------------|----------|
 | R01   | Telnet is enabled on VTY lines   | High     |
 | R03   | enable_plaintext	Enable password stored in plaintext        | High     |
 | R09   | nat_no_overload	NAT is used without overload flag   | Medium   |
+
 Missing Recommendations
+
 | Rule ID | Description                                                  | Severity |
 |---------|--------------------------------------------------------------|----------|
 | R17   | SSH version 2 not configured   | Medium     |
 | R18   | Password encryption service is not enabled   | Medium   |
+
 Interconnection Issues
+
 | Rule ID | Description                                                  | Severity |
 |---------|--------------------------------------------------------------|----------|
 | INT01   | Trunk mismatch between connected switch ports   | Medium     |
