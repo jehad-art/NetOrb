@@ -2,6 +2,15 @@
 
 **NetOrb** is a network security configuration analysis platform designed to automate the discovery, auditing, and hardening of special-purpose infrastructure devices — including routers, switches, and firewalls. This backend is built with **FastAPI** and supports agent-based config collection, rule-based security analysis, and cross-device interconnection validation.
 
+## Table of Content
+
+- [API Endpoint](#API-Endpoints)
+- [Prerequisites](#Prerequisites)
+- [Table of Content](#table-of-content)
+- [Environment Preparation](#Environment-Preparation)
+- [Virtual Network topology](#Virtual-Network-topology)
+- [Getting Started](#Getting-Started)
+- [Expected Output](#Expected-Output)
 
 ## Features
 
@@ -68,7 +77,7 @@ Re-analyzes all saved configurations for interconnection issues only.
 
 
 
-Example Rules
+## Example Rules
 
 Misconfiguration
 
@@ -94,23 +103,6 @@ Interconnection Issues
 | INT03   | BPDU Guard / Root Guard misalignment across switches   | High   |
 | INT04   | Firewall bypass: traffic reaching app server directly, skipping WAF   | Medium   |
 	
-	
-	
-# NetOrb - An Automated Network security Hardening
-
-<h2>Abstract</h2>
-Hardening the configuration of network assets has become an essential practice for both General-Purpose and Special-Purpose Operating Systems. Security regulations and standards mandate this process to minimize the risk of misconfiguration, which can lead to significant operational and security vulnerabilities. Misconfigurations leave networks exposed to various types of attacks, compromising the confidentiality, integrity, and availability (CIA) of critical assets. Network administrators often lack the specialized expertise required to implement security configurations, as their primary focus is typically on maintaining network performance and operational efficiency.
-
-This is a proposed passive, automated solution for hardening the configurations of the network architecture. The solution identifies critical assets and analyzes them for potential misconfigurations. It is designed to address all aspects of network security, including asset configuration, architectural segmentation, and Defense-In-Depth strategies.
-
-## Table of Content
-
-- [Prerequisites](#Prerequisites)
-- [Table of Content](#table-of-content)
-- [Environment Preparation](#Environment-Preparation)
-- [Virtual Network topology](#Virtual-Network-topology)
-- [Getting Started](#Getting-Started)
-- [Expected Output](#Expected-Output)
 
 ## Prerequisites
 <h3>Software Requirements</h3>
@@ -119,11 +111,13 @@ This is a proposed passive, automated solution for hardening the configurations 
         &emsp; - json (for configuration structure)<br>
         &emsp; - pretteytable (for data tabular view)<br>
         &emsp; - netmiko (for network access)<br>
-    <b>Automation Tools:</b><br>
-        &emsp; - Ansible (for large-scale router configuration management, optional)<br>
+	&emsp; - FastAPI (for backend)<br>
+ 	&emsp; - Pymongo (for database integration)<br>
+	&emsp; - Cryptography (Fernet)<br>
+ 	&emsp; - Uvicorn (for development)<br>
     <b>Network Emulation</b><br>
-        &emsp; - Eve-ng (for network emulation)<br>
-        &emsp; - Eve-ng VM (Hosting VM and separating network adapters)<br>
+        &emsp; - Eve-ng (Cloud virtual lab - Cloudmylab)<br>
+        &emsp; - Cisco Anyconnect (VPN Access to cloud)<br>
 
 <h3>Hardware Requirements</h3>
 <b>System:</b><br>
@@ -133,31 +127,43 @@ This is a proposed passive, automated solution for hardening the configurations 
    &emsp; - Stable internet connection for fetching vulnerability updates and remote SSH access.<br>
 
 ## Environment Preparation
-<b>Install Network Emulation (Eve-ng)::</b><br>
-- Install the client.<br>
-- Install Eve-ng VM.<br>
-- Configure the network setting in vmware to make it bridge network.<br>
-- Make sure the vm ip in the same subnet of the host’s.<br>
-- After client finishes installation, in the setup wizard, choose <b style="color:#006633;">“run appliance in a virtual machine” </b>.<br>
-- Install the intended virtual system (if it is node in eve-ng, it must be qcow2 file).<br>
-- Configure the preferences to add the run through local vm<br>
-- Add a new template device with the installed image<br>
-- Creating a new network adapter from within the virtualization system<br>
-- After creating the virtual adapter and assiging an ip to it, assign an ip to eve-ng vm in the same subnet to any interface that would be selected for the cloud node which will be addedinside eve-ng. see below on how to do it by accessing the file in ```bash cat /etc/network/interfaces``` :<br>
+<b>Install Anyconnect</b><br>
+- Connect to "https://new-jersey01.cloudmylab.com"<br>
+- Username: jehad_alhussien<br>
+- Password: Alaacl@53$$$$$<br>
+- Then access the server through: https://10.20.51.2 <br>
+- Credentials: admin/eve<br>
+- The lab name: Heteroginous lab<br>
+- Cloud running on frontend: https://vercel.com/jehads-projects-f04d7275/net-orb-dashboard<br>
+- Cloud running on backend: https://dashboard.render.com/web/srv-d0jt36juibrs73913hdg/logs<br>
+- Cloud running for database: mogodb atlas<br>
 
-![image](https://github.com/user-attachments/assets/92a7adff-0945-493b-ada4-c471eb6a7b90)
-<br>
-<p>Figure: Required settings for eve-ng VM</p>
+## Run Locally
+```bash
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
 ## Virtual Network topology
-<img src="https://github.com/user-attachments/assets/a2cce0ee-4db9-4420-8955-710239a62c6f" />
-<br>
 <p align='center'>Figure: The somulated network topology</p>
 <br>
 <h2>Initial Configuration</h2>
 <b>Sample configuration applied to the router</b><br>
 <img src="https://github.com/user-attachments/assets/309f22d4-7234-419e-9707-3bef64f04a8a" /><br>
 <p>Figure: snippet of sample Cisco IOSv12 configuration</p><br>
+
+## Agent Integration
+
+# The agent perform
+- Device discovery via TCP scanning
+- Config extraction via SSH (Netmiko)
+- Mode + CDP neighbor parsing
+- Posts JSON configs to submit_config for full analysis
+
+# Agent must include:
+- cdp_neighbors: output of show cdp neighbors detail
+- raw_config: full running config
+- interfaces: parsed with mode + neighbor info injected
 
 ## Getting Started
 ### Download the code locally
