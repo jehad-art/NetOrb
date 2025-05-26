@@ -2,7 +2,6 @@
 
 **NetOrb** is a network security configuration analysis platform designed to automate the discovery, auditing, and hardening of special-purpose infrastructure devices — including routers, switches, and firewalls. This backend is built with **FastAPI** and supports agent-based config collection, rule-based security analysis, and cross-device interconnection validation.
 
----
 
 ## Features
 
@@ -15,22 +14,20 @@
   - Interconnection rules (e.g., trunk mismatches, bypassed security zones)
 - **Agent-Compatible**: Works with a lightweight Python agent running inside EVE-NG or other labs.
 
----
 
 ## Project Structure
 NetOrb/
-├── analyzer/
-│ ├── analyzer.py # Main analysis logic
-│ ├── base_rules.py # Generic security checks
-│ ├── router_rules.py # Router-specific rules
-│ ├── switch_rules.py # Switch-specific rules
-│ ├── interconnection_rules.py # Cross-device analysis
-├── db.py # MongoDB collections
-├── devices.py # FastAPI router for config endpoints
-├── crypto_utils.py # Fernet encryption/decryption
-├── settings.py # App settings and agent token
+- ├── analyzer/
+- │ ├── analyzer.py # Main analysis logic
+- │ ├── base_rules.py # Generic security checks
+- │ ├── router_rules.py # Router-specific rules
+- │ ├── switch_rules.py # Switch-specific rules
+- │ ├── interconnection_rules.py # Cross-device analysis
+- ├── db.py # MongoDB collections
+- ├── devices.py # FastAPI router for config endpoints
+- ├── crypto_utils.py # Fernet encryption/decryption
+- ├── settings.py # App settings and agent token
 
----
 
 ## 🔧 API Endpoints
 
@@ -54,7 +51,7 @@ Submit a full device configuration JSON for analysis.
     "interconnection_issues": [...]
   }
 }
-
+```
 
 # NetOrb - An Automated Network security Hardening
 
